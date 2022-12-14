@@ -11,6 +11,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+      <h1>QR Code Generator</h1>
         <QRCard />
       </main>
     </div>

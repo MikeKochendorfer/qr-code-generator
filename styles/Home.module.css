@@ -1,5 +1,5 @@
 .container {
-  padding: 0 2rem;
+  background: #1bc2e3;
 }
 
 .main {
@@ -10,4 +10,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.main h1 {
+  font-size: 4rem;
+  text-align: center;
 }

@@ -1,10 +1,10 @@
 import { useState, ChangeEvent, useRef, FormEvent } from "react";
 import QRCode from "qrcode.react";
-import styles from '../styles/QRCardStyles.module.css'
+import styles from "../styles/QRCardStyles.module.css";
 
 export default function QRCard(): JSX.Element {
   const [inputs, setInputs] = useState({
-    url: "",
+    url: "https://",
     fgColor: "black",
     bgColor: "white",
   });
@@ -13,31 +13,28 @@ export default function QRCard(): JSX.Element {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   }
 
-  let qrCanvas = useRef(null);
+  const qrCanvas = useRef<HTMLDivElement>(null);
   function handleSubmit(e: FormEvent): void {
     e.preventDefault();
 
-    //@ts-ignore
-    let canvas = qrCanvas.current.querySelector("canvas");
-    let image = canvas.toDataURL("/image/png");
+    let canvas = qrCanvas?.current?.querySelector("canvas");
+    let image = canvas?.toDataURL("/image/png");
     let anchor = document.createElement("a");
-    anchor.href = image;
-    anchor.download = "custom-qr-code.png";
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
+    if (image) {
+      anchor.href = image;
+      anchor.download = "custom-qr-code.png";
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+    } else
+      console.error(
+        "Oops! There must be an image string in order to download."
+      );
   }
 
   return (
-    <div
-      className={styles.card}
-    >
-      <h1>QR Code Generator</h1>
-
-      <form
-        className={styles.form}
-        onSubmit={handleSubmit}
-      >
+    <div className={styles.card}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <label htmlFor="url">URL:</label>
         <input
           type="url"
@@ -64,15 +61,14 @@ export default function QRCard(): JSX.Element {
         />
         <button type="submit">Download QR Code</button>
       </form>
-      <br />
 
-      <div ref={qrCanvas} style={{ display: "grid", justifyContent: "center" }}>
+      <div className={styles.qrWrapper} ref={qrCanvas}>
         {
           <QRCode
             value={inputs.url}
             fgColor={inputs.fgColor}
             bgColor={inputs.bgColor}
-            size={200}
+            size={250}
           />
         }
       </div>
